@@ -1,15 +1,18 @@
-import express from 'express';
-import cors from 'cors';
-import routes from './src/routes/index.js';
-import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from './src/config/swagger.js';
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import routes from "./src/routes/index.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./src/config/swagger.js";
+import config from "./src/config/env.js";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: config.FRONTEND_URL, credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use('/api', routes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api", routes);
 
 export default app;
